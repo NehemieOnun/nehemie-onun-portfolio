@@ -1,0 +1,8 @@
+{
+  "name": "Néhémie Onun Kambongh - Portfolio",
+  "description": "Portfolio professionnel de Néhémie Onun Kambongh, Développeur Full Stack, Ingénieur en Génie Informatique & Passionné d'IA, Cloud et Cybersécurité.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
