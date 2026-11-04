@@ -305,8 +305,24 @@ class FileStorage implements Storage {
       fn(db);
       await fs.mkdir(path.dirname(this.file), { recursive: true });
       const tmp = `${this.file}.tmp`;
-      await fs.writeFile(tmp, JSON.stringify(db, null, 2), 'utf8');
-      await fs.rename(tmp, this.file);
+      const json = JSON.stringify(db, null, 2);
+      await fs.writeFile(tmp, json, 'utf8');
+      // Windows : l'antivirus ou OneDrive peut bloquer un instant le fichier (EPERM/EBUSY).
+      for (let attempt = 0; ; attempt++) {
+        try {
+          await fs.rename(tmp, this.file);
+          break;
+        } catch (err) {
+          const code = (err as { code?: string }).code;
+          if ((code !== 'EPERM' && code !== 'EBUSY' && code !== 'EACCES') || attempt >= 4) {
+            // Dernier recours : écriture directe.
+            await fs.writeFile(this.file, json, 'utf8');
+            await fs.rm(tmp, { force: true });
+            break;
+          }
+          await new Promise((r) => setTimeout(r, 50 * (attempt + 1)));
+        }
+      }
     });
     this.queue = run.catch(() => undefined);
     return run;
