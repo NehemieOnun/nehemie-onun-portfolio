@@ -58,7 +58,7 @@ export const DEFAULT_SITE: SiteContent = {
   socials: [{ id: 'github', label: 'GitHub', url: 'https://github.com/NehemieOnun', icon: 'github' }],
 
   stats: [
-    { id: 'projects', value: '5+', label: { fr: 'Projets réalisés', en: 'Projects built' } },
+    { id: 'projects', value: '6+', label: { fr: 'Projets réalisés', en: 'Projects built' } },
     { id: 'certs', value: '7', label: { fr: 'Certifications', en: 'Certifications' } },
     { id: 'year', value: 'Bac 3', label: { fr: 'Génie Informatique', en: 'Computer Engineering' } },
     { id: 'tech', value: '15+', label: { fr: 'Technologies utilisées', en: 'Technologies used' } }
@@ -82,6 +82,24 @@ export const DEFAULT_SITE: SiteContent = {
       tags: ['React', 'TypeScript', 'Express', 'PostgreSQL', 'Prisma', 'JWT / RBAC', 'Vercel'],
       githubUrl: 'https://github.com/NehemieOnun/ur-gedt-portal',
       demoUrl: 'https://ur-gedt-portal.vercel.app'
+    },
+    {
+      id: 'mdct-app',
+      title: 'MDCT — Site d’entreprise',
+      category: 'web',
+      image: '',
+      featured: true,
+      description: {
+        fr: 'Site officiel de MDCT (Massive and Dynamic Company Trading), entreprise de services industriels basée à Lubumbashi.',
+        en: 'Official website of MDCT (Massive and Dynamic Company Trading), an industrial services company based in Lubumbashi.'
+      },
+      fullDescription: {
+        fr: 'Présentation des activités de l’entreprise : maintenance industrielle, électricité et énergie, génie civil et construction métallique, assainissement industriel, ingénierie et fourniture. Site rapide et responsive, thème clair/sombre, référencement soigné, en-têtes de sécurité, déployé sur Vercel.',
+        en: 'Presents the company’s activities: industrial maintenance, electricity and energy, civil engineering and steel construction, industrial sanitation, engineering and supply. Fast responsive website, light/dark theme, careful SEO, security headers, deployed on Vercel.'
+      },
+      tags: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Vercel'],
+      githubUrl: '',
+      demoUrl: 'https://mdct-app-dusky.vercel.app'
     },
     {
       id: 'smartfix-ai-rdc',
