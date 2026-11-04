@@ -42,7 +42,7 @@ export const SectionHeader: React.FC<{ id: string; path: string; title: string; 
 export const Section: React.FC<{ id: string; children: React.ReactNode; className?: string }> = ({ id, children, className = '' }) => {
   const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} id={id} aria-labelledby={`${id}-title`} className={`relative py-24 sm:py-28 ${className}`}>
+    <section ref={ref} id={id} aria-labelledby={`${id}-title`} className={`relative py-16 sm:py-20 ${className}`}>
       <div className="container-page">{children}</div>
     </section>
   );

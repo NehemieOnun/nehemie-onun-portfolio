@@ -13,6 +13,8 @@ import {
   GraduationCap,
   HeartHandshake,
   Layout,
+  Network,
+  Smartphone,
   Server,
   ShieldCheck,
   Sparkles,
@@ -56,6 +58,33 @@ const CATEGORY_LABEL: Record<ProjectCategory, { fr: string; en: string }> = {
   other: { fr: 'Autre', en: 'Other' }
 };
 export const PROJECT_CATEGORIES = Object.keys(CATEGORY_LABEL) as ProjectCategory[];
+
+/** Icône de couverture utilisée quand un projet n'a pas d'image. */
+const CATEGORY_ICON: Record<ProjectCategory, React.ComponentType<{ className?: string }>> = {
+  web: Layout,
+  mobile: Smartphone,
+  ai: Sparkles,
+  cloud: Cloud,
+  db: Database,
+  network: Network,
+  other: Code2
+};
+
+/** Couverture générée (dégradé + icône + titre) pour les projets sans capture. */
+const ProjectCover: React.FC<{ project: Project; big: boolean }> = ({ project, big }) => {
+  const Icon = CATEGORY_ICON[project.category] ?? Code2;
+  return (
+    <div
+      className={`relative flex flex-col items-center justify-center gap-3 overflow-hidden bg-gradient-to-br from-brand/25 via-surface-2 to-navy/30 px-6 text-center ${big ? 'aspect-[16/9]' : 'aspect-[16/10]'}`}
+    >
+      <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,var(--c-glow-1),transparent_60%)]" />
+      <span className="relative grid h-14 w-14 place-items-center rounded-2xl border border-line-strong bg-surface/70 text-accent shadow-lg transition-transform duration-500 group-hover:scale-110">
+        <Icon className="h-7 w-7" />
+      </span>
+      <span className="relative line-clamp-2 max-w-[90%] text-sm font-medium text-ink/80">{project.title}</span>
+    </div>
+  );
+};
 
 const ProjectLinks: React.FC<{ project: Project; compact?: boolean }> = ({ project, compact }) => {
   const { t } = useLanguage();
@@ -122,6 +151,8 @@ export const Projects: React.FC = () => {
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {shown.map((p, i) => {
           const big = p.featured && i === 0 && filter === 'all';
+          // Badge « phare » limité aux deux premiers projets mis en avant
+          const highlight = p.featured && i < 2;
           return (
             <article
               key={p.id}
@@ -137,15 +168,13 @@ export const Projects: React.FC = () => {
                     className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${big ? 'aspect-[16/9]' : 'aspect-[16/10]'}`}
                   />
                 ) : (
-                  <div className={`relative grid place-items-center bg-gradient-to-br from-brand/20 via-surface-2 to-navy/15 ${big ? 'aspect-[16/9]' : 'aspect-[16/10]'}`}>
-                    <span className="font-mono text-sm text-muted">{`<${p.title.split(' ')[0]} />`}</span>
-                  </div>
+                  <ProjectCover project={p} big={big} />
                 )}
               </button>
               <div className="relative flex flex-1 flex-col p-6">
                 <div className="flex items-center justify-between gap-3">
                   <span className="chip">{CATEGORY_LABEL[p.category]?.[language] ?? p.category}</span>
-                  {p.featured && <span className="font-mono text-xs text-accent">★ {t('phare', 'featured')}</span>}
+                  {highlight && <span className="font-mono text-xs text-accent">★ {t('phare', 'featured')}</span>}
                 </div>
                 <h3 className={`mt-4 font-semibold tracking-tight ${big ? 'text-2xl sm:text-3xl' : 'text-xl'}`}>
                   <button type="button" onClick={() => setSelected(p)} className="text-left hover:text-accent">
