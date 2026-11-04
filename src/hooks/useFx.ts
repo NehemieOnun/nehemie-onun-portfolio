@@ -20,7 +20,8 @@ export function useReveal<T extends HTMLElement>() {
           }
         }
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+      // Déclenchement anticipé : l'élément apparaît avant d'entrer à l'écran
+      { rootMargin: '0px 0px 15% 0px', threshold: 0 }
     );
     el.querySelectorAll('.reveal').forEach((n) => io.observe(n));
     if (el.classList.contains('reveal')) io.observe(el);
