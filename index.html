@@ -1,13 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>Néhémie Onun — Développeur Full Stack</title>
+    <meta
+      name="description"
+      content="Portfolio de Néhémie Onun, étudiant en Génie Informatique à l'Université de Lubumbashi (RDC) et développeur Full Stack : React, TypeScript, Node.js, réseaux et cybersécurité."
+    />
+    <meta name="author" content="Néhémie Onun" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Applique le thème avant l'affichage pour éviter un flash clair/sombre -->
+    <script>
+      (function () {
+        try {
+          var p = localStorage.getItem('theme');
+          // Clair par défaut (couleurs du logo) ; sombre seulement si le visiteur l'a choisi
+          var dark = p === 'dark' || (p === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Aperçu lors du partage (WhatsApp, LinkedIn, Facebook…) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Néhémie Onun — Développeur Full Stack" />
+    <meta
+      property="og:description"
+      content="Projets, compétences et certifications : React, TypeScript, Node.js, réseaux Cisco et cybersécurité. Lubumbashi, RDC."
+    />
+    <meta property="og:image" content="/brand/og-image.png" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
+    <noscript>Ce portfolio nécessite JavaScript. Contact : nehemieonun182@gmail.com</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-

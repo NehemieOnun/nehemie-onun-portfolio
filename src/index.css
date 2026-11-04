@@ -1,56 +1,501 @@
 @import "tailwindcss";
 
+/* Mode sombre piloté par la classe .dark sur <html> (sombre par défaut). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+ * Thème aux couleurs du logo NDS : bleu marine, bleu vif et blanc (clair par défaut).
+ * Toutes les couleurs sont des variables pour basculer clair / sombre.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Couleurs du logo NDS : bleu marine, bleu vif et blanc */
+  --c-navy: #0b2a5b;
+  --c-brand: #1e6fe8;
+  --c-canvas: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #f3f7fd;
+  --c-sunken: #eef3fb;
+  --c-ink: #0b2a5b;
+  --c-muted: #56698a;
+  --c-line: #e1e8f3;
+  --c-line-strong: #c9d5e8;
+  --c-accent: #1e6fe8;
+  --c-accent-strong: #1658c4;
+  --c-accent-soft: #e6effd;
+  --c-on-accent: #ffffff;
+  --c-cyan: #2c5aa0;
+  --c-green: #0f8a5f;
+  --c-copper: #c2410c;
+  --c-danger: #d92d20;
+  --c-grid: rgba(11, 42, 91, 0.05);
+  --c-glow-1: rgba(30, 111, 232, 0.12);
+  --c-glow-2: rgba(11, 42, 91, 0.06);
+  --c-chart-1: #1e6fe8;
+  --c-chart-2: #0b2a5b;
+  color-scheme: light;
+}
+
+.dark {
+  --c-navy: #0b2a5b;
+  --c-brand: #3b82f6;
+  --c-canvas: #06142d;
+  --c-surface: #0b1f40;
+  --c-surface-2: #10284f;
+  --c-sunken: #051126;
+  --c-ink: #ffffff;
+  --c-muted: #9db0cf;
+  --c-line: rgba(255, 255, 255, 0.09);
+  --c-line-strong: rgba(255, 255, 255, 0.16);
+  --c-accent: #4f8ff0;
+  --c-accent-strong: #8fb7f3;
+  --c-accent-soft: rgba(30, 111, 232, 0.2);
+  --c-on-accent: #ffffff;
+  --c-cyan: #8fb7f3;
+  --c-green: #34d399;
+  --c-copper: #fb923c;
+  --c-danger: #f87171;
+  --c-grid: rgba(255, 255, 255, 0.04);
+  --c-glow-1: rgba(30, 111, 232, 0.28);
+  --c-glow-2: rgba(143, 183, 243, 0.1);
+  --c-chart-1: #4f8ff0;
+  --c-chart-2: #d6e4fb;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-navy: var(--c-navy);
+  --color-brand: var(--c-brand);
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-sunken: var(--c-sunken);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-accent: var(--c-accent);
+  --color-accent-strong: var(--c-accent-strong);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-on-accent: var(--c-on-accent);
+  --color-cyan: var(--c-cyan);
+  --color-green: var(--c-green);
+  --color-copper: var(--c-copper);
+  --color-danger: var(--c-danger);
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+
 @layer base {
   html {
+    background: var(--c-canvas);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
     scroll-behavior: smooth;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: #0b1120;
-    color: #f8fafc;
+    scroll-padding-top: 5rem;
   }
 
   body {
-    background-color: #0b1120;
-    color: #f8fafc;
+    background: var(--c-canvas);
+    color: var(--c-ink);
     min-height: 100vh;
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  ::selection {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
   }
 
-  ::-webkit-scrollbar-track {
-    background: #0b1120;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 9999px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #334155;
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 }
 
-/* Print Styles for CV Download */
-@media print {
-  body * {
-    visibility: hidden;
+@layer components {
+  .display {
+    font-weight: 650;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
-  #printable-cv, #printable-cv * {
-    visibility: visible;
+  .heading {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
   }
 
-  #printable-cv {
-    position: absolute;
-    left: 0;
-    top: 0;
+  .container-page {
     width: 100%;
-    color: #000 !important;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Fond : grille fine + halos bleus en haut de page */
+  .bg-grid {
+    background-image:
+      linear-gradient(var(--c-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--c-grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  .bg-glow {
+    background:
+      radial-gradient(40rem 22rem at 20% -5%, var(--c-glow-1), transparent 70%),
+      radial-gradient(36rem 20rem at 85% 0%, var(--c-glow-2), transparent 70%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--c-ink) 35%, var(--c-brand) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Carte avec halo qui suit la souris (variables --mx / --my posées en JS) */
+  .card {
+    position: relative;
+    border: 1px solid var(--c-line);
+    background: var(--c-surface);
+    border-radius: 1.1rem;
+    overflow: hidden;
+  }
+
+  .card-spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--c-glow-1), transparent 45%);
+  }
+
+  .card-spotlight:hover::before {
+    opacity: 1;
+  }
+
+  .card-spotlight:hover {
+    border-color: var(--c-line-strong);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.65rem;
+    padding: 0.62rem 1.05rem;
+    font-weight: 550;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--c-navy);
+    color: #fff;
+  }
+
+  .dark .btn-primary {
+    background: #ffffff;
+    color: var(--c-navy);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 0 0 4px var(--c-accent-soft), 0 8px 30px -8px var(--c-accent);
+  }
+
+  .btn-accent {
+    background: var(--c-brand);
+    color: #fff;
+  }
+
+  .btn-accent:hover:not(:disabled) {
+    background: #1658c4;
+    box-shadow: 0 10px 30px -10px var(--c-brand);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--c-line-strong);
+    background: var(--c-surface);
+    color: var(--c-ink);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--c-accent);
+  }
+
+  .btn-ghost {
+    color: var(--c-ink);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--c-surface-2);
+  }
+
+  .link {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--c-line);
+    padding: 0.18rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--c-muted);
+    background: var(--c-surface-2);
+  }
+
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--c-accent);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 0.6rem;
+    border: 1px solid var(--c-line-strong);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    padding: 0.6rem 0.8rem;
+    font-size: 0.93rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .field::placeholder {
+    color: var(--c-muted);
+    opacity: 0.65;
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px var(--c-accent-soft);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 550;
+    margin-bottom: 0.35rem;
+  }
+
+  /* Apparition douce au défilement (classe ajoutée par useReveal) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    background: var(--c-accent);
+    vertical-align: -0.15em;
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+
+  .marquee-wrap:hover .marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Contenu Markdown des articles */
+  .prose-article {
+    font-size: 1.075rem;
+    line-height: 1.8;
+    max-width: 70ch;
+  }
+
+  .prose-article > * + * {
+    margin-top: 1.1em;
+  }
+
+  .prose-article h2 {
+    font-weight: 650;
+    font-size: 1.55rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-top: 2em;
+  }
+
+  .prose-article h3 {
+    font-weight: 650;
+    font-size: 1.2rem;
+    margin-top: 1.6em;
+  }
+
+  .prose-article a {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose-article ul,
+  .prose-article ol {
+    padding-left: 1.4em;
+  }
+
+  .prose-article ul {
+    list-style: disc;
+  }
+
+  .prose-article ol {
+    list-style: decimal;
+  }
+
+  .prose-article li::marker {
+    color: var(--c-accent);
+  }
+
+  .prose-article li + li {
+    margin-top: 0.35em;
+  }
+
+  .prose-article blockquote {
+    border-left: 3px solid var(--c-accent);
+    padding-left: 1em;
+    color: var(--c-muted);
+  }
+
+  .prose-article code {
+    font-family: var(--font-mono);
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-line);
+    border-radius: 0.35em;
+    padding: 0.1em 0.35em;
+    font-size: 0.88em;
+  }
+
+  .prose-article pre {
+    background: var(--c-sunken);
+    border: 1px solid var(--c-line);
+    border-radius: 0.75rem;
+    padding: 1em 1.2em;
+    overflow-x: auto;
+    font-size: 0.88rem;
+  }
+
+  .prose-article pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+
+  .prose-article img {
+    border-radius: 0.75rem;
+    border: 1px solid var(--c-line);
+    max-width: 100%;
+    height: auto;
+  }
+
+  .prose-article hr {
+    border-color: var(--c-line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Page CV : impression / export PDF en noir sur blanc */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  html,
+  body {
     background: #fff !important;
-    padding: 20px !important;
+    color: #000 !important;
+  }
+
+  .print-sheet,
+  .print-sheet * {
+    color: #000 !important;
+    background: transparent !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+  }
+
+  .print-sheet section {
+    break-inside: avoid;
+  }
+
+  @page {
+    margin: 14mm;
   }
 }

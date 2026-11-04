@@ -1,51 +1,77 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Language } from '../types';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import type { L10n, L10nList, Language } from '../../shared/types';
+import { tr, trList } from '../../shared/utils';
 
 interface LanguageContextType {
   language: Language;
-  toggleLanguage: () => void;
   setLanguage: (lang: Language) => void;
+  toggleLanguage: () => void;
+  /** Texte d'interface : t('Bonjour', 'Hello') */
   t: (fr: string, en: string) => string;
+  /** Contenu bilingue : l(project.description) */
+  l: (value: L10n | undefined) => string;
+  ll: (value: L10nList | undefined) => string[];
+  /** Applique la langue par défaut du site si le visiteur n'a encore rien choisi. */
+  applySiteDefault: (lang: Language) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
+function storedLanguage(): Language | null {
+  try {
     const saved = localStorage.getItem('language');
     if (saved === 'fr' || saved === 'en') return saved;
-    const browserLang = navigator.language.toLowerCase();
-    return browserLang.startsWith('fr') ? 'fr' : 'en';
-  });
+  } catch {
+    /* stockage indisponible */
+  }
+  return null;
+}
+
+function initialLanguage(): Language {
+  return storedLanguage() ?? 'fr';
+}
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
+  const [chosen, setChosen] = useState(() => storedLanguage() !== null);
 
   useEffect(() => {
-    localStorage.setItem('language', language);
     document.documentElement.lang = language;
   }, [language]);
 
-  const toggleLanguage = () => {
-    setLanguageState((prev) => (prev === 'fr' ? 'en' : 'fr'));
-  };
-
-  const setLanguage = (lang: Language) => {
+  // Seul un choix explicite du visiteur est mémorisé.
+  const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-  };
+    setChosen(true);
+    try {
+      localStorage.setItem('language', lang);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
-  const t = (fr: string, en: string) => {
-    return language === 'fr' ? fr : en;
-  };
+  const applySiteDefault = useCallback(
+    (lang: Language) => {
+      if (!chosen) setLanguageState(lang);
+    },
+    [chosen]
+  );
+
+  const t = useCallback((fr: string, en: string) => (language === 'fr' ? fr : en), [language]);
+  const l = useCallback((v: L10n | undefined) => tr(v, language), [language]);
+  const ll = useCallback((v: L10nList | undefined) => trList(v, language), [language]);
 
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage, setLanguage, t }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage, toggleLanguage: () => setLanguage(language === 'fr' ? 'en' : 'fr'), t, l, ll, applySiteDefault }}
+    >
       {children}
     </LanguageContext.Provider>
   );
 };
 
-export const useLanguage = () => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
-};
+export function useLanguage() {
+  const ctx = useContext(LanguageContext);
+  if (!ctx) throw new Error('useLanguage must be used within LanguageProvider');
+  return ctx;
+}
