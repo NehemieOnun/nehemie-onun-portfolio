@@ -318,8 +318,8 @@
   /* Apparition douce au défilement (classe ajoutée par useReveal) */
   .reveal {
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(10px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
   }
 
   .reveal.is-visible {
